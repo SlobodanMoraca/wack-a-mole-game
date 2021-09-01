@@ -1,11 +1,52 @@
 const square = document.querySelectorAll('.square')
 const mole = document.querySelectorAll('.mole')
 const timeLeft = document.querySelector('#time-left')
-let score = document.querySelector('#score')
+const startBtn = document.querySelector('#startGameBtn')
+const bestScore = document.querySelector('#bestScore')
 
-let result = 0;
-let curentTime = timeLeft.textContent
+const score = document.querySelector('#score')
 
+
+let bestResult = 0
+
+
+const StartAGame = startBtn.addEventListener('click', () => {
+    let curentTime = 6
+    let result = 0;
+    score.textContent = result
+     
+
+    const countDown = () => {
+        curentTime--
+        timeLeft.textContent = curentTime
+    
+        if(curentTime === 0){
+            clearInterval(timerId)
+            alert('GAME IS OVER! Your final score is: ' + result)
+
+
+            if(result > bestResult){
+                bestResult = result
+                bestScore.innerText = bestResult
+            }
+        }
+    }
+
+    square.forEach(id =>{
+        id.addEventListener('mouseup', () =>{
+            if(id.id === hitPosition){
+                result++
+                score.textContent = result
+            }
+        })
+    })
+
+    countDown()
+    let timerId = setInterval(countDown, 1000)
+
+
+    
+})
 
 function randomSquare() {
     square.forEach(className => {
@@ -20,14 +61,7 @@ function randomSquare() {
     hitPosition = randomPosition.id
 }
 
-square.forEach(id =>{
-    id.addEventListener('mouseup', () =>{
-        if(id.id === hitPosition){
-            result++
-            score.textContent = result
-        }
-    })
-})
+
 
 function moveMole(){
     let timerId = null
@@ -35,26 +69,3 @@ function moveMole(){
 }
 
 moveMole();
-
-
-function countDown(){
-    curentTime--
-    timeLeft.textContent = curentTime
-
-    if(curentTime === 0){
-        clearInterval(timerId)
-        alert('GAME IS OVER! Your final score is: ' + result)
-        
-    }
-}
-
-
-
-let timerId = setInterval(countDown, 1000)
-
-
-function startTheGame(){
-    timeLeft.textContent = 3
-    countDown()
-
-}
